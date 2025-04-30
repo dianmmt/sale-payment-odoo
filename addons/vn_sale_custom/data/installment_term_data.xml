@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Dữ liệu mặc định cho các kỳ hạn trả góp -->
+        <record id="installment_term_3" model="vn.sale.installment.term">
+            <field name="name">3 tháng</field>
+            <field name="months">3</field>
+            <field name="annual_interest_rate">10.0</field>
+        </record>
+        
+        <record id="installment_term_6" model="vn.sale.installment.term">
+            <field name="name">6 tháng</field>
+            <field name="months">6</field>
+            <field name="annual_interest_rate">12.0</field>
+        </record>
+        
+        <record id="installment_term_12" model="vn.sale.installment.term">
+            <field name="name">12 tháng</field>
+            <field name="months">12</field>
+            <field name="annual_interest_rate">15.0</field>
+        </record>
+        
+        <record id="installment_term_24" model="vn.sale.installment.term">
+            <field name="name">24 tháng</field>
+            <field name="months">24</field>
+            <field name="annual_interest_rate">18.0</field>
+        </record>
+        
+        <record id="installment_term_36" model="vn.sale.installment.term">
+            <field name="name">36 tháng</field>
+            <field name="months">36</field>
+            <field name="annual_interest_rate">20.0</field>
+        </record>
+        
+        <record id="installment_term_48" model="vn.sale.installment.term">
+            <field name="name">48 tháng</field>
+            <field name="months">48</field>
+            <field name="annual_interest_rate">22.0</field>
+        </record>
+        
+        <record id="installment_term_60" model="vn.sale.installment.term">
+            <field name="name">60 tháng</field>
+            <field name="months">60</field>
+            <field name="annual_interest_rate">24.0</field>
+        </record>
+    </data>
+</odoo>

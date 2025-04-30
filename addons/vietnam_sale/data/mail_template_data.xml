@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Mẫu email thông báo hóa đơn quá hạn -->
+        <record id="mail_template_unpaid_invoice_reminder" model="mail.template">
+            <field name="name">Hóa đơn: Thông báo quá hạn thanh toán</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="subject">Thông báo hóa đơn quá hạn: {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Kính gửi {{ object.partner_id.name }},<br/><br/>
+        Chúng tôi nhận thấy rằng hóa đơn sau đã quá hạn thanh toán:
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Số hóa đơn</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ object.name }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Ngày hóa đơn</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ format_date(object.invoice_date) }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Số tiền</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ format_amount(object.amount_total, object.currency_id) }}</td>
+            </tr>
+        </table>
+        <p>Vui lòng thanh toán hóa đơn này trong thời gian sớm nhất.</p>
+        <p>Nếu bạn đã thanh toán, vui lòng bỏ qua thông báo này.</p>
+        <br/>
+        <p>Trân trọng,</p>
+        <p>{{ object.company_id.name }}</p>
+    </p>
+</div>
+            </field>
+        </record>
+        
+        <!-- Mẫu email thông báo hóa đơn điện tử -->
+        <record id="mail_template_e_invoice" model="mail.template">
+            <field name="name">Hóa đơn điện tử</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Hóa đơn điện tử: {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Kính gửi {{ object.partner_id.name }},<br/><br/>
+        Cảm ơn bạn đã đặt hàng tại {{ object.company_id.name }}. Đính kèm là hóa đơn điện tử của đơn hàng {{ object.name }}.
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Số hóa đơn</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ object.e_invoice_number or '' }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Ký hiệu</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ object.e_invoice_series or '' }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Ngày hóa đơn</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ format_date(object.e_invoice_date) }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Tổng tiền</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ format_amount(object.amount_total, object.currency_id) }}</td>
+            </tr>
+        </table>
+        <p>Bạn có thể xem và tải hóa đơn điện tử từ Cổng thông tin điện tử của Tổng cục Thuế.</p>
+        <br/>
+        <p>Trân trọng,</p>
+        <p>{{ object.company_id.name }}</p>
+    </p>
+</div>
+            </field>
+        </record>
+        
+        <!-- Mẫu email thông báo kỳ trả góp đến hạn -->
+        <record id="mail_template_installment_due" model="mail.template">
+            <field name="name">Trả góp: Thông báo đến hạn thanh toán</field>
+            <field name="model_id" ref="model_vietnam_sale_installment_schedule"/>
+            <field name="subject">Thông báo đến hạn thanh toán: Kỳ trả góp #{{ object.month_number }}</field>
+            <field name="email_from">{{ (object.sale_order_id.company_id.email or user.email) }}</field>
+            <field name="partner_to">{{ object.sale_order_id.partner_id.id }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Kính gửi {{ object.sale_order_id.partner_id.name }},<br/><br/>
+        Chúng tôi xin thông báo rằng kỳ trả góp sau sắp đến hạn thanh toán:
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Đơn hàng</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ object.sale_order_id.name }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Kỳ trả góp</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ object.month_number }}/{{ object.sale_order_id.installment_months }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Ngày đến hạn</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ format_date(object.payment_date) }}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Số tiền thanh toán</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">{{ format_amount(object.total_amount, object.sale_order_id.currency_id) }}</td>
+            </tr>
+        </table>
+        <p>Vui lòng thanh toán đúng hạn để duy trì lịch sử tín dụng tốt.</p>
+        <br/>
+        <p>Trân trọng,</p>
+        <p>{{ object.sale_order_id.company_id.name }}</p>
+    </p>
+</div>
+            </field>
+        </record>
+    </data>
+</odoo>

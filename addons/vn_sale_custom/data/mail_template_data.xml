@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Email template gửi cho khách hàng -->
+        <record id="mail_template_payment_reminder" model="mail.template">
+            <field name="name">Nhắc nhở thanh toán trả góp</field>
+            <field name="model_id" ref="model_vn_sale_installment_plan"/>
+            <field name="subject">Nhắc nhở: Thanh toán đơn hàng ${object.sale_order_id.name} sắp đến hạn</field>
+            <field name="email_from">${(object.sale_order_id.company_id.email or user.email)|safe}</field>
+            <field name="email_to">${object.sale_order_id.partner_id.email|safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Kính gửi ${object.sale_order_id.partner_id.name},
+                        <br/><br/>
+                        Đây là thông báo nhắc nhở về khoản thanh toán trả góp sắp đến hạn của đơn hàng <strong>${object.sale_order_id.name}</strong>.
+                        <br/><br/>
+                        Chi tiết thanh toán:
+                        <ul>
+                            <li>Kỳ thanh toán: ${object.installment_number}</li>
+                            <li>Số tiền: ${format_amount(object.amount, object.sale_order_id.currency_id)}</li>
+                            <li>Ngày đến hạn: ${format_date(object.due_date)}</li>
+                        </ul>
+                        <br/>
+                        Vui lòng thanh toán đúng hạn để tránh phát sinh phí quá hạn.
+                        <br/><br/>
+                        Trân trọng,
+                        <br/>
+                        ${object.sale_order_id.company_id.name}
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+        
+        <!-- Email template gửi cho nhân viên nội bộ -->
+        <record id="mail_template_payment_reminder_internal" model="mail.template">
+            <field name="name">Nhắc nhở thanh toán trả góp (nội bộ)</field>
+            <field name="model_id" ref="model_vn_sale_installment_plan"/>
+            <field name="subject">Cảnh báo: Khoản thanh toán trả góp sắp đến hạn - ${object.sale_order_id.name}</field>
+            <field name="email_from">${user.email|safe}</field>
+            <field name="email_to">${object.sale_order_id.user_id.email|safe}</field>
+            <field name="partner_to">${object.sale_order_id.user_id.partner_id.id}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; background-color: #F2F2F2; padding: 15px;">
+                    <h3 style="color: #1E5CBC;">Thông báo khoản thanh toán trả góp sắp đến hạn</h3>
+                    <p>
+                        Kính gửi ${object.sale_order_id.user_id.name or 'Người phụ trách'},
+                    </p>
+                    <p>
+                        Đơn hàng <strong>${object.sale_order_id.name}</strong> của khách hàng 
+                        <strong>${object.sale_order_id.partner_id.name}</strong> có khoản thanh toán 
+                        trả góp sắp đến hạn.
+                    </p>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px;">
+                        <tr style="background-color: #E8E8E8;">
+                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Kỳ thanh toán</th>
+                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Số tiền</th>
+                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Ngày đến hạn</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">${object.installment_number}</td>
+                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">${format_amount(object.amount, object.sale_order_id.currency_id)}</td>
+                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">${format_date(object.due_date)}</td>
+                        </tr>
+                    </table>
+                    <p>
+                        Vui lòng liên hệ với khách hàng để nhắc nhở về khoản thanh toán này.
+                    </p>
+                    <div style="margin-top: 20px;">
+                        <a href="/web#id=${object.id}&amp;model=vn.sale.installment.plan&amp;view_type=form" 
+                           style="display: inline-block; padding: 10px 15px; background-color: #1E5CBC; color: #FFFFFF; text-decoration: none; border-radius: 5px;">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Thêm trường vào form sale order -->
+    <record id="view_order_form_inherit_customer_discount" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.customer.discount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm thông tin lượt mua và giảm giá vào phần đầu form -->
+            <field name="partner_id" position="after">
+                <field name="order_count" readonly="1"/>
+                <label for="loyalty_discount_percentage" string="Mức giảm giá khả dụng:"/>
+                <div class="o_row">
+                    <field name="loyalty_discount_percentage" readonly="1"/>
+                    <span>%</span>
+                </div>
+            </field>
+            
+            <!-- Thêm nhóm thông tin giảm giá vào tab Khác -->
+            <xpath expr="//page[@name='other_information']//group[@name='sales_person']" position="before">
+                <group name="customer_loyalty" string="Thông tin khách hàng thân thiết">
+                    <field name="loyalty_discount"/>
+                    <field name="loyalty_discount_applied" readonly="1"/>
+                    <field name="loyalty_discount_amount" readonly="1" invisible="not loyalty_discount"/>
+                    <button 
+                        name="apply_loyalty_discount" 
+                        string="Áp dụng giảm giá thân thiết" 
+                        type="object" 
+                        class="btn-primary" 
+                        invisible="not (loyalty_discount and loyalty_discount_percentage and not loyalty_discount_applied)"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action để mở danh sách đơn hàng với bộ lọc -->
+    <record id="action_sale_order_loyalty_discount" model="ir.actions.act_window">
+        <field name="name">Đơn hàng có giảm giá</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('loyalty_discount_applied', '=', True)]</field>
+        <field name="context">{'search_default_loyalty_discount_applied': 1}</field>
+    </record>
+
+    <!-- Action để mở danh sách đơn hàng với khách hàng thường xuyên -->
+    <record id="action_sale_order_high_frequency" model="ir.actions.act_window">
+        <field name="name">Khách hàng thường xuyên</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('order_count', '>=', 5)]</field>
+        <field name="context">{'search_default_high_order_count': 1}</field>
+    </record>
+</odoo>

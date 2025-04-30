@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_vietnam_sale" model="ir.ui.view">
+        <field name="name">sale.order.form.vietnam.sale</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm thông tin trả góp vào nhóm tổng tiền -->
+            <xpath expr="//group[@name='sale_total']" position="inside">
+                <field name="is_installment"/>
+                <field name="installment_term" attrs="{'invisible': [('is_installment', '=', False)], 'required': [('is_installment', '=', True)]}"/>
+                <field name="interest_rate_custom" attrs="{'invisible': [('is_installment', '=', False)]}"/>
+                <field name="amount_vat" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
+                <field name="amount_with_vat" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
+                <field name="total_with_interest" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
+                <field name="monthly_payment" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
+            </xpath>
+            
+            <!-- Ẩn field trả góp ở phần phía trên -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <!-- Field đã được chuyển xuống section tổng tiền -->
+            </xpath>
+            
+            <!-- Bỏ tab trả góp riêng, nhưng vẫn giữ kế hoạch trả góp -->
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page string="Kế hoạch trả góp" name="installment_plan" attrs="{'invisible': [('is_installment', '=', False)]}">
+                    <field name="installment_plan_ids" readonly="1">
+                        <tree>
+                            <field name="installment_number"/>
+                            <field name="due_date"/>
+                            <field name="amount"/>
+                            <field name="payment_date"/>
+                            <field name="state"/>
+                            <field name="reminder_sent"/>
+                            <button name="action_mark_as_paid" string="Đánh dấu đã thanh toán" type="object" icon="fa-check" attrs="{'invisible': [('state', '=', 'paid')]}"/>
+                            <button name="action_send_reminder" string="Gửi nhắc nhở" type="object" icon="fa-envelope" attrs="{'invisible': ['|', ('reminder_sent', '=', True), ('state', '=', 'paid')]}"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Tỉnh/Thành phố -->
+        <record id="province_hanoi" model="res.province">
+            <field name="name">Hà Nội</field>
+            <field name="code">01</field>
+            <field name="country_id" ref="base.vn"/>
+        </record>
+        
+        <record id="province_hcm" model="res.province">
+            <field name="name">Hồ Chí Minh</field>
+            <field name="code">02</field>
+            <field name="country_id" ref="base.vn"/>
+        </record>
+        
+        <record id="province_danang" model="res.province">
+            <field name="name">Đà Nẵng</field>
+            <field name="code">03</field>
+            <field name="country_id" ref="base.vn"/>
+        </record>
+        
+        <!-- Quận/Huyện tại Hà Nội -->
+        <record id="district_hanoi_hoankiem" model="res.district">
+            <field name="name">Hoàn Kiếm</field>
+            <field name="code">001</field>
+            <field name="province_id" ref="province_hanoi"/>
+        </record>
+        
+        <record id="district_hanoi_badinh" model="res.district">
+            <field name="name">Ba Đình</field>
+            <field name="code">002</field>
+            <field name="province_id" ref="province_hanoi"/>
+        </record>
+        
+        <record id="district_hanoi_dongda" model="res.district">
+            <field name="name">Đống Đa</field>
+            <field name="code">003</field>
+            <field name="province_id" ref="province_hanoi"/>
+        </record>
+        
+        <!-- Phường tại Hoàn Kiếm -->
+        <record id="ward_hoankiem_hangbac" model="res.ward">
+            <field name="name">Hàng Bạc</field>
+            <field name="code">00001</field>
+            <field name="district_id" ref="district_hanoi_hoankiem"/>
+        </record>
+        
+        <record id="ward_hoankiem_hangbo" model="res.ward">
+            <field name="name">Hàng Bồ</field>
+            <field name="code">00002</field>
+            <field name="district_id" ref="district_hanoi_hoankiem"/>
+        </record>
+        
+        <record id="ward_hoankiem_hangbuom" model="res.ward">
+            <field name="name">Hàng Buồm</field>
+            <field name="code">00003</field>
+            <field name="district_id" ref="district_hanoi_hoankiem"/>
+        </record>
+        
+        <!-- Quận/Huyện tại TP. Hồ Chí Minh -->
+        <record id="district_hcm_quan1" model="res.district">
+            <field name="name">Quận 1</field>
+            <field name="code">701</field>
+            <field name="province_id" ref="province_hcm"/>
+        </record>
+        
+        <record id="district_hcm_quan3" model="res.district">
+            <field name="name">Quận 3</field>
+            <field name="code">703</field>
+            <field name="province_id" ref="province_hcm"/>
+        </record>
+        
+        <record id="district_hcm_binhtan" model="res.district">
+            <field name="name">Bình Tân</field>
+            <field name="code">731</field>
+            <field name="province_id" ref="province_hcm"/>
+        </record>
+        
+        <!-- Phường tại Quận 1 -->
+        <record id="ward_quan1_bennghe" model="res.ward">
+            <field name="name">Bến Nghé</field>
+            <field name="code">70101</field>
+            <field name="district_id" ref="district_hcm_quan1"/>
+        </record>
+        
+        <record id="ward_quan1_benthanh" model="res.ward">
+            <field name="name">Bến Thành</field>
+            <field name="code">70102</field>
+            <field name="district_id" ref="district_hcm_quan1"/>
+        </record>
+        
+        <record id="ward_quan1_dakao" model="res.ward">
+            <field name="name">Đa Kao</field>
+            <field name="code">70103</field>
+            <field name="district_id" ref="district_hcm_quan1"/>
+        </record>
+    </data>
+</odoo>

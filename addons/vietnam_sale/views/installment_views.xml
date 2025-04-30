@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view cho lịch trả góp -->
+    <record id="view_installment_schedule_form" model="ir.ui.view">
+        <field name="name">vietnam.sale.installment.schedule.form</field>
+        <field name="model">vietnam.sale.installment.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Lịch trả góp">
+                <header>
+                    <button name="action_confirm_payment" 
+                            string="Xác nhận thanh toán" 
+                            type="object" 
+                            invisible="state in ['paid']" 
+                            class="oe_highlight"/>
+                    <button name="action_partial_payment" 
+                            string="Thanh toán một phần" 
+                            type="object"
+                            invisible="state in ['paid']" 
+                            class="btn-primary"/>
+                    <field name="state" 
+                           widget="statusbar" 
+                           statusbar_visible="draft,paid,late"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sale_order_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="month_number"/>
+                            <field name="payment_date"/>
+                            <field name="actual_payment_date" 
+                                   readonly="1" 
+                                   invisible="not actual_payment_date"/>
+                        </group>
+                        <group>
+                            <field name="principal_amount" widget="monetary"/>
+                            <field name="interest_amount" widget="monetary"/>
+                            <field name="total_amount" widget="monetary"/>
+                            <field name="remaining_amount" widget="monetary"/>
+                        </group>
+                    </group>
+                    <group string="Ghi chú">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Tree view cho lịch trả góp -->
+    <record id="view_installment_schedule_tree" model="ir.ui.view">
+        <field name="name">vietnam.sale.installment.schedule.tree</field>
+        <field name="model">vietnam.sale.installment.schedule</field>
+        <field name="arch" type="xml">
+            <tree string="Lịch trả góp" 
+                  decoration-danger="state=='late'" 
+                  decoration-success="state=='paid'" 
+                  decoration-info="state=='partial'">
+                <field name="sale_order_id"/>
+                <field name="month_number"/>
+                <field name="payment_date"/>
+                <field name="principal_amount" sum="Tổng gốc" widget="monetary"/>
+                <field name="interest_amount" sum="Tổng lãi" widget="monetary"/>
+                <field name="total_amount" sum="Tổng phải trả" widget="monetary"/>
+                <field name="remaining_amount" widget="monetary"/>
+                <field name="state"/>
+                <field name="actual_payment_date"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search view cho lịch trả góp -->
+    <record id="view_installment_schedule_search" model="ir.ui.view">
+        <field name="name">vietnam.sale.installment.schedule.search</field>
+        <field name="model">vietnam.sale.installment.schedule</field>
+        <field name="arch" type="xml">
+            <search string="Lịch trả góp">
+                <field name="sale_order_id"/>
+                <field name="payment_date"/>
+                <field name="state"/>
+                
+                <filter string="Đã thanh toán" 
+                        name="paid" 
+                        domain="[('state', '=', 'paid')]"/>
+                <filter string="Chưa thanh toán" 
+                        name="unpaid" 
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Trễ hạn" 
+                        name="late" 
+                        domain="[('state', '=', 'late')]"/>
+                <filter string="Thanh toán một phần" 
+                        name="partial" 
+                        domain="[('state', '=', 'partial')]"/>
+                <filter string="Đến hạn hôm nay" 
+                        name="due_today" 
+                        domain="[('payment_date', '=', context_today())]"/>
+                <filter string="Sắp đến hạn (7 ngày)" 
+                        name="due_soon" 
+                        domain="[('payment_date', '&lt;=', context_today() + relativedelta(days=7)), 
+                                 ('payment_date', '&gt;', context_today()),
+                                 ('state', 'not in', ['paid'])]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter name="group_by_state" 
+                            string="Trạng thái" 
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_by_payment_date" 
+                            string="Ngày thanh toán" 
+                            context="{'group_by': 'payment_date'}"/>
+                    <filter name="group_by_month_number" 
+                            string="Kỳ trả góp" 
+                            context="{'group_by': 'month_number'}"/>
+                    <filter name="group_by_sale_order" 
+                            string="Đơn hàng" 
+                            context="{'group_by': 'sale_order_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Calendar view cho lịch trả góp -->
+    <record id="view_installment_schedule_calendar" model="ir.ui.view">
+        <field name="name">vietnam.sale.installment.schedule.calendar</field>
+        <field name="model">vietnam.sale.installment.schedule</field>
+        <field name="arch" type="xml">
+            <calendar string="Lịch trả góp" 
+                      date_start="payment_date" 
+                      event_open_popup="true"
+                      color="state">
+                <field name="total_amount" widget="monetary"/>
+                <field name="state"/>
+                <field name="sale_order_id"/>
+            </calendar>
+        </field>
+    </record>
+    
+    <!-- Action cho lịch trả góp -->
+    <record id="action_installment_schedule" model="ir.actions.act_window">
+        <field name="name">Lịch trả góp</field>
+        <field name="res_model">vietnam.sale.installment.schedule</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_installment_schedule_search"/>
+        <field name="context">{'search_default_unpaid': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Không có khoản trả góp nào để hiển thị
+            </p>
+            <p>
+                Các khoản trả góp sẽ được tạo tự động từ đơn hàng
+                khi chọn phương thức thanh toán là "Trả góp".
+            </p>
+        </field>
+    </record>
+</odoo>

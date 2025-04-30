@@ -1,0 +1,32 @@
+<odoo>
+    <!-- Form view cho wizard tạo hóa đơn điện tử -->
+    <record id="view_e_invoice_wizard_form" model="ir.ui.view">
+        <field name="name">vietnam.e.invoice.wizard.form</field>
+        <field name="model">vietnam.e.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tạo hóa đơn điện tử">
+                <group>
+                    <group>
+                        <field name="sale_order_id" readonly="1" invisible="not sale_order_id"/>
+                        <field name="invoice_id" readonly="1" invisible="not invoice_id"/>
+                        <field name="e_invoice_provider"/>
+                        <field name="invoice_date"/>
+                    </group>
+                    <group>
+                        <field name="invoice_series"/>
+                        <field name="invoice_number"/>
+                        <field name="lookup_invoice_status"/>
+                    </group>
+                </group>
+                <group string="Tùy chọn bổ sung">
+                    <field name="include_payment_info"/>
+                    <field name="auto_send_email"/>
+                </group>
+                <footer>
+                    <button name="action_sign_and_send" string="Ký và gửi" type="object" class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

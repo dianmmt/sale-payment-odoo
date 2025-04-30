@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view cho Phường/Xã -->
+    <record id="view_ward_form" model="ir.ui.view">
+        <field name="name">res.ward.form</field>
+        <field name="model">res.ward</field>
+        <field name="arch" type="xml">
+            <form string="Phường/Xã">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="district_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Tree view cho Phường/Xã -->
+    <record id="view_ward_tree" model="ir.ui.view">
+        <field name="name">res.ward.tree</field>
+        <field name="model">res.ward</field>
+        <field name="arch" type="xml">
+            <tree string="Phường/Xã">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="district_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search view cho Phường/Xã -->
+    <record id="view_ward_search" model="ir.ui.view">
+        <field name="name">res.ward.search</field>
+        <field name="model">res.ward</field>
+        <field name="arch" type="xml">
+            <search string="Phường/Xã">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="district_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_district" string="Quận/Huyện" context="{'group_by': 'district_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Form view cho Quận/Huyện -->
+    <record id="view_district_form" model="ir.ui.view">
+        <field name="name">res.district.form</field>
+        <field name="model">res.district</field>
+        <field name="arch" type="xml">
+            <form string="Quận/Huyện">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="province_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Phường/Xã" name="wards">
+                            <field name="ward_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Tree view cho Quận/Huyện -->
+    <record id="view_district_tree" model="ir.ui.view">
+        <field name="name">res.district.tree</field>
+        <field name="model">res.district</field>
+        <field name="arch" type="xml">
+            <tree string="Quận/Huyện">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="province_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search view cho Quận/Huyện -->
+    <record id="view_district_search" model="ir.ui.view">
+        <field name="name">res.district.search</field>
+        <field name="model">res.district</field>
+        <field name="arch" type="xml">
+            <search string="Quận/Huyện">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="province_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_province" string="Tỉnh/Thành phố" context="{'group_by': 'province_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Form view cho Tỉnh/Thành phố -->
+    <record id="view_province_form" model="ir.ui.view">
+        <field name="name">res.province.form</field>
+        <field name="model">res.province</field>
+        <field name="arch" type="xml">
+            <form string="Tỉnh/Thành phố">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="country_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Quận/Huyện" name="districts">
+                            <field name="district_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="active"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Tree view cho Tỉnh/Thành phố -->
+    <record id="view_province_tree" model="ir.ui.view">
+        <field name="name">res.province.tree</field>
+        <field name="model">res.province</field>
+        <field name="arch" type="xml">
+            <tree string="Tỉnh/Thành phố">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="country_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search view cho Tỉnh/Thành phố -->
+    <record id="view_province_search" model="ir.ui.view">
+        <field name="name">res.province.search</field>
+        <field name="model">res.province</field>
+        <field name="arch" type="xml">
+            <search string="Tỉnh/Thành phố">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="country_id"/>
+                <filter string="Việt Nam" name="vietnam" domain="[('country_id.code', '=', 'VN')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_country" string="Quốc gia" context="{'group_by': 'country_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Actions -->
+    <record id="action_ward" model="ir.actions.act_window">
+        <field name="name">Phường/Xã</field>
+        <field name="res_model">res.ward</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_ward_search"/>
+    </record>
+    
+    <record id="action_district" model="ir.actions.act_window">
+        <field name="name">Quận/Huyện</field>
+        <field name="res_model">res.district</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_district_search"/>
+    </record>
+    
+    <record id="action_province" model="ir.actions.act_window">
+        <field name="name">Tỉnh/Thành phố</field>
+        <field name="res_model">res.province</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_province_search"/>
+        <field name="context">{'search_default_vietnam': 1}</field>
+    </record>
+    
+    <!-- Menu Items -->
+    <menuitem id="menu_vietnam_address_root" 
+              name="Địa chỉ Việt Nam" 
+              parent="sale.sale_menu_root" 
+              sequence="100"/>
+              
+    <menuitem id="menu_province" 
+              name="Tỉnh/Thành phố" 
+              parent="menu_vietnam_address_root" 
+              action="action_province" 
+              sequence="10"/>
+              
+    <menuitem id="menu_district" 
+              name="Quận/Huyện" 
+              parent="menu_vietnam_address_root" 
+              action="action_district" 
+              sequence="20"/>
+              
+    <menuitem id="menu_ward" 
+              name="Phường/Xã" 
+              parent="menu_vietnam_address_root" 
+              action="action_ward" 
+              sequence="30"/>
+    
+    <!-- Mở rộng form view res.partner để thêm trường địa chỉ Việt Nam -->
+    <record id="view_partner_form_vn_address" model="ir.ui.view">
+        <field name="name">res.partner.form.vn.address</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="state_id" position="before">
+                <field name="province_id" placeholder="Tỉnh/Thành phố" 
+                       options="{'no_create': True}" class="o_address_province"
+                       invisible="country_id != %(base.vn)d"/>
+            </field>
+            <field name="city" position="before">
+                <field name="district_id" placeholder="Quận/Huyện" 
+                       options="{'no_create': True}" class="o_address_district"
+                       invisible="country_id != %(base.vn)d"/>
+                <field name="ward_id" placeholder="Phường/Xã" 
+                       options="{'no_create': True}" class="o_address_ward"
+                       invisible="country_id != %(base.vn)d"/>
+            </field>
+            <!-- Ẩn trường city khi quốc gia là Việt Nam -->
+            <field name="city" position="attributes">
+                <attribute name="invisible">country_id == %(base.vn)d</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

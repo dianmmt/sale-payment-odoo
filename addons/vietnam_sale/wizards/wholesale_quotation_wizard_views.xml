@@ -1,0 +1,85 @@
+<odoo>
+    <!-- Form view cho wizard tạo báo giá sỉ -->
+    <record id="view_wholesale_quotation_wizard_form" model="ir.ui.view">
+        <field name="name">vietnam.wholesale.quotation.wizard.form</field>
+        <field name="model">vietnam.wholesale.quotation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tạo báo giá sỉ">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="customer_type" readonly="1"/>
+                            <field name="total_quantity"/>
+                            <field name="discount_rate"/>
+                            <field name="special_price"/>
+                        </group>
+                        <group>
+                            <field name="sale_person_id" options="{'no_create': True}"/>
+                            <field name="show_purchase_history"/>
+                            <field name="total_purchased_amount" widget="monetary" readonly="1"/>
+                            <field name="total_purchased_quantity" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Chọn sản phẩm">
+                        <field name="product_ids" nolabel="1" options="{'no_create': True}">
+                            <tree>
+                                <field name="default_code"/>
+                                <field name="name"/>
+                                <field name="list_price" widget="monetary"/>
+                                <field name="wholesale_price" widget="monetary"/>
+                                <field name="vn_product_unit"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <div invisible="not show_purchase_history">
+                        <group string="Lịch sử mua hàng">
+                            <field name="purchase_history_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date_order"/>
+                                    <field name="amount_total" widget="monetary"/>
+                                    <field name="total_product_quantity"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="not special_price">
+                        <p><i class="fa fa-info-circle"/> Đơn hàng có số lượng lớn (>100 sản phẩm) sẽ được áp dụng giá đặc biệt. Vui lòng thảo luận trực tiếp với khách hàng để thỏa thuận giá.</p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_create_quotation" string="Tạo báo giá" type="object" class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Form view cho wizard thanh toán một phần kỳ trả góp -->
+    <record id="view_installment_partial_payment_wizard_form" model="ir.ui.view">
+        <field name="name">vietnam.installment.partial.payment.wizard.form</field>
+        <field name="model">vietnam.installment.partial.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Thanh toán một phần">
+                <group>
+                    <group>
+                        <field name="installment_id" readonly="1"/>
+                        <field name="payment_amount" widget="monetary"/>
+                    </group>
+                    <group>
+                        <field name="payment_date"/>
+                    </group>
+                </group>
+                <group string="Ghi chú">
+                    <field name="note" nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_partial_payment" string="Xác nhận thanh toán" type="object" class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

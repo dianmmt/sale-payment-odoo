@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_ward_user,res.ward.user,model_res_ward,base.group_user,1,0,0,0
+access_res_ward_sale_manager,res.ward.sale.manager,model_res_ward,sales_team.group_sale_manager,1,1,1,1
+access_res_district_user,res.district.user,model_res_district,base.group_user,1,0,0,0
+access_res_district_sale_manager,res.district.sale.manager,model_res_district,sales_team.group_sale_manager,1,1,1,1
+access_res_province_user,res.province.user,model_res_province,base.group_user,1,0,0,0
+access_res_province_sale_manager,res.province.sale.manager,model_res_province,sales_team.group_sale_manager,1,1,1,1
+access_vietnam_sale_installment_schedule_user,vietnam.sale.installment.schedule.user,model_vietnam_sale_installment_schedule,base.group_user,1,0,0,0
+access_vietnam_sale_installment_schedule_sale,vietnam.sale.installment.schedule.sale,model_vietnam_sale_installment_schedule,sales_team.group_sale_salesman,1,1,1,0
+access_vietnam_sale_installment_schedule_manager,vietnam.sale.installment.schedule.manager,model_vietnam_sale_installment_schedule,sales_team.group_sale_manager,1,1,1,1
+access_vietnam_e_invoice_wizard_sale,vietnam.e.invoice.wizard.sale,model_vietnam_e_invoice_wizard,sales_team.group_sale_salesman,1,1,1,1
+access_vietnam_wholesale_quotation_wizard_sale,vietnam.wholesale.quotation.wizard.sale,model_vietnam_wholesale_quotation_wizard,sales_team.group_sale_salesman,1,1,1,1
+access_vietnam_installment_partial_payment_wizard_sale,vietnam.installment.partial.payment.wizard.sale,model_vietnam_installment_partial_payment_wizard,sales_team.group_sale_salesman,1,1,1,1

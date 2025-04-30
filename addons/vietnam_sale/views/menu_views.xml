@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu quản lý trả góp -->
+    <menuitem id="menu_sale_installment" 
+              name="Quản lý trả góp" 
+              parent="sale.sale_menu_root" 
+              sequence="8"/>
+              
+    <menuitem id="menu_installment_schedule" 
+              name="Lịch trả góp" 
+              parent="menu_sale_installment" 
+              action="action_installment_schedule" 
+              sequence="10"/>
+</odoo>

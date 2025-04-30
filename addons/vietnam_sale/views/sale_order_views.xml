@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mở rộng form đơn hàng bán -->
+    <record id="view_order_form_vietnam" model="ir.ui.view">
+        <field name="name">sale.order.form.vietnam</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm thông tin khách hàng Việt Nam vào panel bên phải -->
+            <xpath expr="//group[@name='sales_person']" position="before">
+                <group name="vn_customer_info" string="Thông tin khách hàng VN">
+                    <field name="customer_type" readonly="1"/>
+                    <field name="is_wholesale"/>
+                    <field name="wholesale_discount" invisible="not is_wholesale"/>
+                    <field name="total_product_quantity" widget="integer"/>
+                </group>
+            </xpath>
+            
+            <!-- Thêm thông tin hóa đơn Việt Nam vào notebook -->
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page string="Thông tin hóa đơn VN" name="vn_invoice_info">
+                    <group>
+                        <group string="Thông tin hóa đơn">
+                            <field name="vn_invoice_type"/>
+                            <field name="need_invoice"/>
+                            <field name="e_invoice_status" readonly="1"/>
+                            <field name="buyer_tax_code" required="need_invoice and vn_invoice_type == 'gtgt'"/>
+                            <field name="buyer_representative"/>
+                            <field name="vat_inclusive"/>
+                        </group>
+                        <group string="Thanh toán">
+                            <field name="payment_method"/>
+                            <field name="installment_months" invisible="payment_method != 'installment'"/>
+                            <field name="installment_interest" invisible="payment_method != 'installment'"/>
+                            <field name="installment_amount" invisible="payment_method != 'installment'" widget="monetary"/>
+                        </group>
+                    </group>
+                    <!-- Hiển thị lịch trả góp nếu được chọn -->
+                    <div invisible="payment_method != 'installment'">
+                        <h3>Lịch trả góp</h3>
+                        <field name="installment_schedule_ids" readonly="1">
+                            <tree>
+                                <field name="month_number"/>
+                                <field name="payment_date"/>
+                                <field name="principal_amount" sum="Tổng gốc" widget="monetary"/>
+                                <field name="interest_amount" sum="Tổng lãi" widget="monetary"/>
+                                <field name="total_amount" sum="Tổng phải trả" widget="monetary"/>
+                                <field name="remaining_amount" widget="monetary"/>
+                                <field name="state"/>
+                                <field name="actual_payment_date"/>
+                            </tree>
+                        </field>
+                    </div>
+                </page>
+            </xpath>
+            
+            <!-- Thêm nút tạo hóa đơn điện tử và áp dụng chiết khấu sỉ -->
+            <xpath expr="//header/button[@name='action_confirm']" position="after">
+                <button name="action_create_e_invoice" string="Tạo hóa đơn điện tử" type="object" 
+                        class="btn-primary" invisible="state not in ['sale', 'done']"/>
+                <button name="apply_wholesale_discount" string="Áp dụng chiết khấu sỉ" type="object"
+                        invisible="not is_wholesale or state in ['sale', 'done', 'cancel']"/>
+                <button name="action_create_wholesale_quotation" string="Tạo báo giá sỉ mới" type="object"
+                        invisible="state not in ['draft', 'sent']"/>
+            </xpath>
+            
+            <!-- Sửa đổi dòng sản phẩm để thêm thông tin thuế GTGT -->
+            <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="after">
+                <field name="vn_vat_rate"/>
+                <field name="vn_product_unit"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='order_line']/form//field[@name='tax_id']" position="after">
+                <field name="vn_vat_rate"/>
+                <field name="vn_product_unit"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Mở rộng tree view đơn hàng -->
+    <record id="view_order_tree_vietnam" model="ir.ui.view">
+        <field name="name">sale.order.tree.vietnam</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="customer_type" optional="show"/>
+                <field name="is_wholesale" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="payment_method" optional="show"/>
+                <field name="e_invoice_status" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Mở rộng bộ lọc đơn hàng -->
+    <record id="view_sales_order_filter_vn" model="ir.ui.view">
+        <field name="name">sale.order.list.select.vietnam</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                <separator/>
+                <filter string="Đơn hàng sỉ" name="wholesale_orders" domain="[('is_wholesale', '=', True)]"/>
+                <filter string="Đơn hàng lẻ" name="retail_orders" domain="[('is_wholesale', '=', False)]"/>
+                <separator/>
+                <filter string="Trả góp" name="installment_orders" domain="[('payment_method', '=', 'installment')]"/>
+                <filter string="Chưa xuất HĐĐT" name="no_einvoice" domain="[('e_invoice_status', '=', 'not_created')]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Loại khách hàng" name="customer_type" context="{'group_by': 'customer_type'}"/>
+                <filter string="Phương thức thanh toán" name="payment_method" context="{'group_by': 'payment_method'}"/>
+                <filter string="Trạng thái HĐĐT" name="e_invoice_status" context="{'group_by': 'e_invoice_status'}"/>
+                <filter string="Loại hóa đơn" name="vn_invoice_type" context="{'group_by': 'vn_invoice_type'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_vn_sale_installment_plan_tree" model="ir.ui.view">
+        <field name="name">vn.sale.installment.plan.tree</field>
+        <field name="model">vn.sale.installment.plan</field>
+        <field name="arch" type="xml">
+            <tree string="Kế hoạch trả góp">
+                <field name="sale_order_id"/>
+                <field name="installment_number"/>
+                <field name="due_date"/>
+                <field name="amount"/>
+                <field name="payment_date"/>
+                <field name="state"/>
+                <field name="reminder_sent"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_vn_sale_installment_plan_form" model="ir.ui.view">
+        <field name="name">vn.sale.installment.plan.form</field>
+        <field name="model">vn.sale.installment.plan</field>
+        <field name="arch" type="xml">
+            <form string="Kế hoạch trả góp">
+                <header>
+                    <button name="action_mark_as_paid" string="Đánh dấu đã thanh toán" type="object" attrs="{'invisible': [('state', '=', 'paid')]}"/>
+                    <button name="action_send_reminder" string="Gửi nhắc nhở" type="object" attrs="{'invisible': ['|', ('reminder_sent', '=', True), ('state', '=', 'paid')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,paid,overdue"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="installment_number"/>
+                            <field name="due_date"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="payment_date"/>
+                            <field name="reminder_sent"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_vn_sale_installment_plan" model="ir.actions.act_window">
+        <field name="name">Kế hoạch trả góp</field>
+        <field name="res_model">vn.sale.installment.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Không có kế hoạch trả góp nào được tạo
+            </p>
+        </field>
+    </record>
+    
+    <menuitem id="menu_vn_sale_installment_plan"
+              name="Kế hoạch trả góp"
+              parent="sale.menu_sale_config"
+              action="action_vn_sale_installment_plan"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mở rộng form sản phẩm -->
+    <record id="product_template_form_view_vietnam" model="ir.ui.view">
+        <field name="name">product.template.form.vietnam</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Thêm thông tin sản phẩm Việt Nam vào tab Thông tin chung -->
+            <xpath expr="//page[@name='general_information']//group[@name='group_general']" position="inside">
+                <group string="Thông tin sản phẩm Việt Nam" name="vn_product_info">
+                    <field name="vn_product_unit"/>
+                    <field name="vn_product_code"/>
+                </group>
+            </xpath>
+            
+            <!-- Thêm tab Giá bán Việt Nam -->
+            <xpath expr="//page[@name='sales']" position="after">
+                <page string="Giá bán Việt Nam" name="vn_pricing">
+                    <group>
+                        <group string="Giá bán">
+                            <field name="retail_price" widget="monetary"/>
+                            <field name="wholesale_price" widget="monetary"/>
+                        </group>
+                        <group string="Chiết khấu theo số lượng">
+                            <label for="discount_tier1_qty"/>
+                            <div class="o_row">
+                                <field name="discount_tier1_qty"/> 
+                                <span>sản phẩm</span>
+                                <field name="discount_tier1_rate" class="oe_inline"/> 
+                                <span>%</span>
+                            </div>
+                            
+                            <label for="discount_tier2_qty"/>
+                            <div class="o_row">
+                                <field name="discount_tier2_qty"/> 
+                                <span>sản phẩm</span>
+                                <field name="discount_tier2_rate" class="oe_inline"/> 
+                                <span>%</span>
+                            </div>
+                            
+                            <label for="discount_tier3_qty"/>
+                            <div class="o_row">
+                                <field name="discount_tier3_qty"/> 
+                                <span>sản phẩm (deal trực tiếp)</span>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Mở rộng tree view sản phẩm -->
+    <record id="product_template_tree_view_vietnam" model="ir.ui.view">
+        <field name="name">product.template.tree.vietnam</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="list_price" position="after">
+                <field name="wholesale_price" optional="show"/>
+                <field name="vn_product_unit" optional="show"/>
+                <field name="vn_product_code" optional="hide"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Mở rộng product product form -->
+    <record id="product_normal_form_view_vietnam" model="ir.ui.view">
+        <field name="name">product.product.form.vietnam</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Thêm thông tin sản phẩm Việt Nam vào tab Thông tin chung -->
+            <xpath expr="//page[@name='general_information']//group[@name='group_general']" position="inside">
+                <group string="Thông tin sản phẩm Việt Nam" name="vn_product_info">
+                    <field name="vn_product_unit"/>
+                    <field name="vn_product_code"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Thêm trường tìm kiếm -->
+    <record id="product_template_search_view_vietnam" model="ir.ui.view">
+        <field name="name">product.template.search.vietnam</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="vn_product_code"/>
+                <field name="vn_product_unit"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

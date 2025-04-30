@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_vn_sale_installment_term_tree" model="ir.ui.view">
+        <field name="name">vn.sale.installment.term.tree</field>
+        <field name="model">vn.sale.installment.term</field>
+        <field name="arch" type="xml">
+            <tree string="Kỳ hạn trả góp">
+                <field name="name"/>
+                <field name="months"/>
+                <field name="annual_interest_rate"/>
+                <field name="monthly_interest_rate"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_vn_sale_installment_term_form" model="ir.ui.view">
+        <field name="name">vn.sale.installment.term.form</field>
+        <field name="model">vn.sale.installment.term</field>
+        <field name="arch" type="xml">
+            <form string="Kỳ hạn trả góp">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="months"/>
+                        </group>
+                        <group>
+                            <field name="annual_interest_rate"/>
+                            <field name="monthly_interest_rate" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_vn_sale_installment_term" model="ir.actions.act_window">
+        <field name="name">Kỳ hạn trả góp</field>
+        <field name="res_model">vn.sale.installment.term</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Tạo các kỳ hạn trả góp và đặt lãi suất tương ứng
+            </p>
+        </field>
+    </record>
+    
+    <menuitem id="menu_vn_sale_installment_term"
+              name="Cấu hình kỳ hạn trả góp"
+              parent="sale.menu_sale_config"
+              action="action_vn_sale_installment_term"
+              sequence="20"/>
+</odoo>

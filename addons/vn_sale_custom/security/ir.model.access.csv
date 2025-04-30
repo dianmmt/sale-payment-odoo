@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vn_sale_installment_plan_user,vn.sale.installment.plan.user,model_vn_sale_installment_plan,sales_team.group_sale_salesman,1,1,1,0
+access_vn_sale_installment_plan_manager,vn.sale.installment.plan.manager,model_vn_sale_installment_plan,sales_team.group_sale_manager,1,1,1,1
+access_vn_payment_reminder_user,vn.payment.reminder.user,model_vn_payment_reminder,sales_team.group_sale_salesman,1,1,1,0
+access_vn_payment_reminder_manager,vn.payment.reminder.manager,model_vn_payment_reminder,sales_team.group_sale_manager,1,1,1,1
+access_vn_sale_installment_term_user,vn.sale.installment.term.user,model_vn_sale_installment_term,sales_team.group_sale_salesman,1,0,0,0
+access_vn_sale_installment_term_manager,vn.sale.installment.term.manager,model_vn_sale_installment_term,sales_team.group_sale_manager,1,1,1,1

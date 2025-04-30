@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kế thừa biểu mẫu liên hệ để thêm địa chỉ và thông tin bán hàng theo chuẩn Việt Nam -->
+    <record id="view_partner_form_vietnam" model="ir.ui.view">
+        <field name="name">res.partner.form.vietnam</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm các field ẩn để sử dụng trong điều kiện -->
+            <xpath expr="//sheet" position="inside">
+                <field name="customer_rank" invisible="1"/>
+                <field name="wholesale_auto_qualify" invisible="1"/>
+            </xpath>
+
+            <!-- Thêm các trường địa chỉ Việt Nam (Quận/Huyện, Phường/Xã) -->
+            <xpath expr="//field[@name='city']" position="before">
+                <field name="district_id" placeholder="Quận/Huyện" options="{'no_create': True, 'no_open': True}"/>
+                <field name="ward_id" placeholder="Phường/Xã" options="{'no_create': True, 'no_open': True}"/>
+            </xpath>
+
+            <!-- Thêm tab Thông tin bán hàng VN -->
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Thông tin bán hàng VN" name="vn_sales_info"
+                      attrs="{'invisible': [('customer_rank', '=', 0)]}">
+                    <group>
+                        <group string="Phân loại khách hàng">
+                            <field name="customer_type" widget="radio"/>
+                            <field name="wholesale_discount_rate" attrs="{'invisible': [('customer_type', '!=', 'wholesale')]}"/>
+                            <field name="wholesale_auto_qualify" attrs="{'invisible': [('customer_type', '!=', 'wholesale')]}"/>
+                        </group>
+                        <group string="Thông tin thanh toán">
+                            <field name="account_number"/>
+                            <field name="bank_name"/>
+                            <field name="bank_branch"/>
+                            <field name="allow_installment"/>
+                            <field name="installment_term" attrs="{'invisible': [('allow_installment', '=', False)]}"/>
+                            <field name="installment_interest_rate" attrs="{'invisible': [('allow_installment', '=', False)]}"/>
+                            <field name="credit_limit"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Nút phân tích khách hàng sỉ -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="compute_wholesale_status" type="object"
+                        class="oe_stat_button" icon="fa-refresh"
+                        string="Phân tích khách hàng sỉ"
+                        attrs="{'invisible': ['|', ('customer_rank', '=', 0), ('wholesale_auto_qualify', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Bộ lọc theo loại khách hàng -->
+    <record id="view_res_partner_filter_vn" model="ir.ui.view">
+        <field name="name">res.partner.select.vietnam</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='customer']" position="after">
+                <filter string="Khách sỉ" name="wholesale" domain="[('customer_type', '=', 'wholesale')]"/>
+                <filter string="Khách lẻ" name="retail" domain="[('customer_type', '=', 'retail')]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Loại khách hàng" name="customer_type" context="{'group_by': 'customer_type'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Hiển thị trường loại khách hàng trong danh sách -->
+    <record id="view_partner_tree_vn" model="ir.ui.view">
+        <field name="name">res.partner.tree.vietnam</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="customer_type" optional="show"/>
+                <field name="wholesale_discount_rate" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

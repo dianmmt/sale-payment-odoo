@@ -15,5 +15,3 @@ class VNSaleInstallmentTerm(models.Model):
     def _compute_monthly_interest_rate(self):
         for term in self:
             term.monthly_interest_rate = term.annual_interest_rate / 12
-    
-    

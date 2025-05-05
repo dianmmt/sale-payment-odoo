@@ -8,14 +8,17 @@
             <!-- Thêm thông tin trả góp vào nhóm tổng tiền -->
             <xpath expr="//group[@name='sale_total']" position="inside">
                 <field name="is_installment"/>
-                <field name="installment_term" attrs="{'invisible': [('is_installment', '=', False)], 'required': [('is_installment', '=', True)]}"/>
+                <!-- Trường cũ ẩn đi để giữ dữ liệu -->
+                <field name="installment_term" invisible="1"/>
+                <!-- Sử dụng trường mới -->
+                <field name="installment_term_id" attrs="{'invisible': [('is_installment', '=', False)], 'required': [('is_installment', '=', True)]}"/>
+                <field name="monthly_interest_rate" attrs="{'invisible': [('is_installment', '=', False)]}" readonly="1"/>
                 <field name="interest_rate_custom" attrs="{'invisible': [('is_installment', '=', False)]}"/>
                 <field name="amount_vat" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
                 <field name="amount_with_vat" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
                 <field name="total_with_interest" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
                 <field name="monthly_payment" attrs="{'invisible': [('is_installment', '=', False)]}" widget="monetary"/>
             </xpath>
-            
             <!-- Ẩn field trả góp ở phần phía trên -->
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <!-- Field đã được chuyển xuống section tổng tiền -->
@@ -37,6 +40,19 @@
                         </tree>
                     </field>
                 </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit_tax_column" model="ir.ui.view">
+        <field name="name">sale.order.form.vn.tax.column</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Thay đổi cột tax trong order line -->
+            <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="replace">
+                <field name="tax_id" string="Thuế GTGT (10%)" invisible="1"/>
+                <field name="price_tax" string="Thuế GTGT (10%)" readonly="1"/>
             </xpath>
         </field>
     </record>

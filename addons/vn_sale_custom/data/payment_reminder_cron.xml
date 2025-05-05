@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="ir_cron_payment_reminder" model="ir.cron">
             <field name="name">Nhắc nhở thanh toán trả góp</field>
-            <field name="model_id" ref="model_vn_payment_reminder"/>
+            <field name="model_id" ref="model_vn_sale_installment_plan"/>
             <field name="state">code</field>
             <field name="code">model._send_payment_reminders()</field>
             <field name="interval_number">1</field>

@@ -23,9 +23,10 @@
         'views/installment_term_views.xml',
         'views/payment_reminder_views.xml',
         'security/ir.model.access.csv',  # Đặt security file sau
+        'data/data.xml',
         'data/payment_reminder_cron.xml',
         'data/mail_template_data.xml',
-        'data/installment_term_data.xml',
+        'data/installment_term_data.xml',  
     ],
     'demo': [],
     'installable': True,
